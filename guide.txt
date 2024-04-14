@@ -1,0 +1,21 @@
+-->> npm init for package.json file
+-->> npm i express mongoose cors nodemon dotenv
+create folders for routes, models, controllers,
+create file .env, app.js
+write basic express code to create server and run / api
+add code to use env variables
+use express.json and cors middleware
+
+create transaction route and connect it to app.js
+create ransaction model
+
+
+
+
+
+
+"type": "module",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js"
+  },
