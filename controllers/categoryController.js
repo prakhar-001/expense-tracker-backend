@@ -39,7 +39,7 @@ export const getCategories = TryCatch(async(req, res ,next) => {
     if (type) {
         if(type !== "all") query.type = type;
     }
-    console.log(query)
+    // console.log(query)
     let categories = await CategorySchema.find(query);
 
     return res.status(200).json({
