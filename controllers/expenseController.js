@@ -5,11 +5,11 @@ import { TryCatch } from "../middlewares/error.js";
 export const addExpense = TryCatch(async (req, res, next) => {
     // console.log(req.body)
     
-    const{title, amount, description, date, category, user} = req.body;
+    const{title, amount, description, date, category, user, mode} = req.body;
 
     // console.log(date)
 
-    if (!title || !amount || !description || !date || !category || !user)
+    if (!title || !amount || !description || !date || !category || !user || !mode)
         return next(new ErrorHandler("Please Enter All Fields", 400));
     if(amount <= 0) return next(new ErrorHandler("Amount Can Not Be Negative"))
     
@@ -24,6 +24,7 @@ export const addExpense = TryCatch(async (req, res, next) => {
         description,
         category,
         user,
+        mode,
         date: dateA
     })
 
@@ -38,7 +39,7 @@ export const addExpense = TryCatch(async (req, res, next) => {
 
 export const getExpenses = TryCatch(async(req, res ,next) => {
 
-    const { id: user, month, year } = req.query;
+    const { id: user, month, year, mode } = req.query;
 
     let query = { user };
 
@@ -60,12 +61,21 @@ export const getExpenses = TryCatch(async(req, res ,next) => {
     } else if (month && year) {
         // If month and year are specified, filter by exact month and year
         const monthNumber = parseInt(month, 10);
+        const lastDayOfMonth = new Date(year, monthNumber, 0).getDate();
+
         query.date = {
             $gte: new Date(year, monthNumber - 1, 1), // Start of the month
-            $lt: new Date(year, monthNumber, 0) // End of the month
+            // $lt: new Date(year, monthNumber, 0) // End of the month
+            $lt: new Date(year, monthNumber - 1, lastDayOfMonth + 1)
         };
     }
 
+    // Handle mode filtering
+    if (mode && mode !== "all") {
+        query.mode = mode;
+    }
+
+    // console.log(query)
     let expenses = await ExpenseSchema.find(query).sort({ date: 1 });
 
     return res.status(200).json({

@@ -9,6 +9,7 @@ import { connectDB } from "./db/db.js"
 import transactionRoute from "./routes/transactionRoute.js";
 // import userRoute from "./routes/userRoute.js";
 import userRoute from "./routes/userRoute.js"
+import categoryRoute from "./routes/categoryRoute.js"
 
 
 // Dealing with env variables
@@ -32,6 +33,7 @@ app.use(cors()) //to be able to use api without problem
 // USING ROUTES
 app.use("/api/v1/transaction", transactionRoute)
 app.use("/api/v1/user", userRoute)
+app.use("/api/v1/category", categoryRoute)
 
 
 app.get("/",(req,res)=>{
