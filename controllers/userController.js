@@ -6,8 +6,17 @@ export const newUser = TryCatch(
     async (req,res,next) => {
       const { name, email, _id, password } = req.body;
   
+      // let user = await User.findById(_id);
+      let existingUser = await User.findOne({ email});;
+      // console.log(existingUser)
+      if (existingUser){
+        return res.status(400).json({
+          success: false,
+          message: `User already exists with the same Email ID`,
+        });
+      }
+
       let user = await User.findById(_id);
-  
       if (user)
         return res.status(200).json({
           success: true,
